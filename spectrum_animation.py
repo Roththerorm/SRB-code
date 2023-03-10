@@ -43,32 +43,42 @@ def spec_animation(i, ax, df, min_wave, max_wave, y_low, y_max, noise, peaks_sho
         if peaks_show == 'y':
         
             spectrum = df.iloc[:, i].values
-            peaks, _ = find_peaks(spectrum, height = noise)
+            peaks, _ = find_peaks(spectrum, height = noise, distance=2, prominence=10)
             
             peak_values = spectrum[peaks]
 
-            if peak_values is not None:
+            if peak_values is not None and len(peaks) > 1:
                 
-                highest_peak_idx = np.argmax(peak_values)                
-                highest_peak = peaks[highest_peak_idx]
+                prominences = _['prominences']
+                
+                # sort the peaks by their prominence values
+                sorted_peaks = sorted(zip(peaks, prominences), key=lambda x: x[1], reverse=True)
 
-                # Define a maximum distance from the highest peak
-                max_distance = 20
-
-                # Only consider peaks that are within max_distance of the highest peak
-                valid_peaks = [p for p in peaks if p >= highest_peak or abs(p - highest_peak) < max_distance]
+                # select the two peaks with the highest prominences
+                top_two_peaks = [sorted_peaks[0][0], sorted_peaks[1][0]]
 
 
                 ax.plot(df.iloc[min_wave:max_wave, 0], df.iloc[min_wave:max_wave, i], lw=1.5, color='firebrick')
                 ax.tick_params(axis='both', which='major', labelsize=size)
-                ax.plot(df.iloc[valid_peaks,0], df.iloc[valid_peaks,i], 'v', color='black', label='peak')
+                ax.plot(df.iloc[top_two_peaks,0], df.iloc[top_two_peaks,i], 'v', color='black', label='peak')
 
                 ax.set_xlabel('Wavelength (nm)', labelpad=15)
                 ax.set_ylabel('Intensity (arb. units)', labelpad=15)
                 ax.set_ylim(y_low, y_max)
                 ax.legend(loc='upper right')
-                
                 plt.tight_layout()
+           
+            else:
+                ax.plot(df.iloc[min_wave:max_wave, 0], df.iloc[min_wave:max_wave, i], lw=1.5, color='firebrick')
+                ax.tick_params(axis='both', which='major', labelsize=size)
+                ax.plot(df.iloc[peaks,0], df.iloc[peaks,i], 'v', color='black', label='peak')
+
+                ax.set_xlabel('Wavelength (nm)', labelpad=15)
+                ax.set_ylabel('Intensity (arb. units)', labelpad=15)
+                ax.set_ylim(y_low, y_max)
+                ax.legend(loc='upper right')
+                plt.tight_layout()
+
         
         elif peaks_show == 'n':
             

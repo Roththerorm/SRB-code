@@ -67,10 +67,10 @@ def parisi_histogram(*args, title, save, fig_path):
 
     fig, ax = plt.subplots()
     
-    ax.hist(args[2], bins= math.floor(np.sqrt(len(args[2]))), density=True, facecolor='steelblue')
+    ax.hist(args[2], bins= math.floor(np.sqrt(len(args[2]))/4), density=True, facecolor='firebrick', alpha=0.75)
 
     ax.tick_params(which='both', direction="in")
-    ax.tick_params(which='both', bottom=True, top=True, left=True, right=True)
+    ax.tick_params(which='both', bottom=True, left=True)
    
     ax.xaxis.set_minor_locator(AutoMinorLocator())
     ax.yaxis.set_minor_locator(AutoMinorLocator())
@@ -89,7 +89,12 @@ def parisi_histogram(*args, title, save, fig_path):
     
     ax.set_xlabel('$q$', labelpad=15)
     ax.set_ylabel('$P(q)$', labelpad=15)
-    ax.get_tightbbox()
+    plt.tight_layout()
     
     if save == 'y':
         plt.savefig(fr'{fig_path}\\parisi_coff_{args[0]}_{args[1]}.png')
+    
+    elif save == 'pdf':
+        plt.savefig(rf'C:\Users\nicol\OneDrive\Documentos\1 - Faculdade\Metrologia\Escrita\Universal manuscript template for Optica Publishing Group journals\figures\parisi.pdf')
+    else:
+        plt.show()
