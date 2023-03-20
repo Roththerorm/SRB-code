@@ -38,7 +38,7 @@ def eliminate_non_numeric(path):
 ####################### CODE #################################
 
 # Use the path that only contains the data of collection
-path = r'D:\LaserYb\Medidas Espectrometro\14_02_2023'
+path = r'D:\LaserYb\Medidas Espectrometro\mes 12\22_12_2022'
 
 # Select the elements that only star with a number 
 # (DO NOT CREATE ANY FOLDER THAT STARTS WITH A NUMBER INSIDE THE FILE)

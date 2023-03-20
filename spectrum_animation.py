@@ -6,7 +6,6 @@ This script generates an animation of the data collected in the spectrometer. It
 '''
 
 
-import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
@@ -50,12 +49,16 @@ def spec_animation(i, ax, df, min_wave, max_wave, y_low, y_max, noise, peaks_sho
             if peak_values is not None and len(peaks) > 1:
                 
                 prominences = _['prominences']
+
+                peak_heights = _['peak_heights']
                 
                 # sort the peaks by their prominence values
-                sorted_peaks = sorted(zip(peaks, prominences), key=lambda x: x[1], reverse=True)
+                sorted_peaks = sorted(zip(peaks, prominences, peak_heights), key=lambda x: x[1], reverse=True)
 
                 # select the two peaks with the highest prominences
                 top_two_peaks = [sorted_peaks[0][0], sorted_peaks[1][0]]
+
+                top_two_peak_heights = [sorted_peaks[0][2], sorted_peaks[1][2]]
 
 
                 ax.plot(df.iloc[min_wave:max_wave, 0], df.iloc[min_wave:max_wave, i], lw=1.5, color='firebrick')

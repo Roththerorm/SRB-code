@@ -35,7 +35,7 @@ def q_max():
         ax.scatter(watt, content_list, s=30, facecolors='white', edgecolors='firebrick', zorder=3, alpha=0.75)
         ax.tick_params(axis='both', which='major', labelsize=size)
         ax.set_xlabel('Power (mW)', labelpad=15)
-        ax.set_ylabel(r'$|q|$', labelpad=15)
+        ax.set_ylabel(r'$|q|_{max}$', labelpad=15)
         ax.minorticks_on()
         ax.tick_params(axis='both', which='both', direction='in')
         plt.tight_layout()
