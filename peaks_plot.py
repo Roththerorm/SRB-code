@@ -11,7 +11,7 @@ spectrum_values = [48,1]
 data_length = 5000
 noise = 700
 min_wave = 0
-max_wave = 500
+max_wave = 72
 height_vector = []
 i = 1552
 size = 10
@@ -20,7 +20,7 @@ matplotlib.rcParams['font.family'] = 'sans-serif'
 matplotlib.rcParams.update({'font.size' : 10})
 matplotlib.rcParams['axes.linewidth'] = 1.
 
-path = r'D:\LaserYb\Medidas Espectrometro\20_01_2023\binary_data'
+path = r'D:\LaserYb\Medidas Espectrometro\18_01_2023\binary_data'
 
 filename = f'b_data_{spectrum_values[0]}_{spectrum_values[1]}.npy'
 
@@ -69,16 +69,18 @@ else:
         ax.plot(df.iloc[min_wave:max_wave, 0], df.iloc[min_wave:max_wave, i].subtract(maximum).div(dif) + 1, lw=1.5, color='firebrick')
         ax.tick_params(axis='both', which='major', labelsize=size)
         ax.plot(df.iloc[top_two_peaks,0], df.iloc[top_two_peaks,i].subtract(maximum).div(dif) + 1, 'v', color='black', label='Prominent peaks')
+        ax.text(1021, 0.72, '1\u02E2\u1D57')
+        ax.text(1023.8, 0.99, '2\u207F\u1D48')
         ax.set_xlabel('Wavelength (nm)', labelpad=15)
         ax.set_ylabel('Normalized intensity', labelpad=15)
         ax.tick_params(axis='both', direction='in')
-        ax.legend(loc='upper right')
+        ax.legend(loc='upper left')
         plt.tight_layout()
-        plt.show()
+        plt.savefig(rf'C:\Users\nicol\OneDrive\Documentos\1 - Faculdade\Metrologia\Escrita\Universal manuscript template for Optica Publishing Group journals\figures\peaks_multi.pdf')
     
     else:
-        
-        ax.plot(df.iloc[min_wave:max_wave, 0], df.iloc[min_wave:max_wave, i].subtract(maximum).div(dif) + 1, lw=1.5, color='firebrick', label = 'P\u209A\u1D64\u2098\u209A = 4.8 W')
+        # Mode-locked\n Ti:sapphire
+        ax.plot(df.iloc[min_wave:max_wave, 0], df.iloc[min_wave:max_wave, i].subtract(maximum).div(dif) + 1, lw=1.5, color='firebrick', label = 'Pump CW')
         ax.tick_params(axis='both', which='major', labelsize=size)
 
         ax.set_xlabel('Wavelength (nm)', labelpad=15)
@@ -86,4 +88,4 @@ else:
         ax.tick_params(axis='both', direction='in')
         ax.legend(loc='upper right')
         plt.tight_layout()
-        plt.savefig(rf'C:\Users\nicol\OneDrive\Documentos\1 - Faculdade\Metrologia\Escrita\Universal manuscript template for Optica Publishing Group journals\figures\mode_locked_TiSa.pdf')
+        plt.savefig(rf'C:\Users\nicol\OneDrive\Documentos\1 - Faculdade\Metrologia\Escrita\Universal manuscript template for Optica Publishing Group journals\figures\pump_TiSa.pdf')

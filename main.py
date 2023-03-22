@@ -39,7 +39,7 @@ import matplotlib.ticker as ticker
 pico = 0                # Pick taken in the samples of power
 percentage = 0.5        # Filter used to select the points
 num_points = 3000      # Number of points to calculate Parisi Coefficient
-total_points = 3000     # Total number of replicas
+total_points = 5000     # Total number of replicas
 first_binary_data = 298
 last_binary_data = 298
 step = 2
@@ -50,27 +50,25 @@ i = 0
 colors = ['#347B98', '#E12514', '#5EBA1C']
 
 matplotlib.rcParams['font.family'] = 'sans-serif'
-matplotlib.rcParams.update({'font.size' : 10})
+matplotlib.rcParams.update({'font.size' : 12})
 matplotlib.rcParams['axes.linewidth'] = 1.
 matplotlib.rcParams['legend.handlelength'] = 0
 
 
 ############# MAIN CODE #############
 
-list_plots = [408]
+list_plots = [48]
 l = 1 
 #, 290, 214
-fig, ax = plt.subplots()
-
 for k in list_plots:
 
     r = 0
     
     print(f'Current file ({k}) ({((k-first_binary_data)//step) + 1} of {int((last_binary_data - first_binary_data)/2)}). Round: {l}')
     
-    path = r'D:\LaserYb\Medidas Espectrometro\17_02_2023\binary_data'
+    path = r'D:\LaserYb\Medidas Espectrometro\20_01_2023\binary_data'
 
-    figure_path = r'D:\LaserYb\Resultado de Tratamento de Dados\17_01_23'
+    figure_path = r'C:\Users\nicol\OneDrive\Documentos\1 - Faculdade\Metrologia\Escrita\Universal manuscript template for Optica Publishing Group journals\figures'
 
     filename = f'b_data_{k}_{l}.npy'
     filepath = os.path.join(path, filename)
@@ -155,23 +153,22 @@ for k in list_plots:
 
 
             
+        fig, ax = plt.subplots(num=1)
 
-
-        
-
-            
         args_2 = (k, l, parameters, percentage, ax)
-        
-        # graphs.energy_fluctuation(*args_1, title='n', save='n', fig_path=figure_path)
 
-        heatmap = sns.heatmap(pearson_correlation, vmin=-1, vmax=1, cmap='YlOrRd', xticklabels=100, yticklabels=100, cbar_kws={'label': 'Pearson correlation'}, ax=ax)
+        graphs.parisi_histogram(*args_2, show_title='n', show_label='n', save='y', fig_path=figure_path, format='pdf')
         
-        heatmap.tick_params(which='both', direction="in")
-        heatmap.set_xlabel('Wavelength (nm)')
-        heatmap.set_ylabel('Wavelength (nm)')
-            
-        graphs.parisi_histogram(*args_2, title='n', save='pdf', fig_path=figure_path)
-
+        # fig, ax2 = plt.subplots()
+        # heatmap = sns.heatmap(pearson_correlation, vmin=-1, vmax=1, cmap='YlOrRd', xticklabels=100, yticklabels=100, cbar_kws={'label': 'Pearson correlation'}, ax=ax2)
+        
+        # heatmap.tick_params(which='both', direction="in")
+        # plt.setp(heatmap.get_xticklabels(), visible=False)
+        # heatmap.set_xlabel('Wavelength (nm)', labelpad=15)
+        # heatmap.set_ylabel('Wavelength (nm)', labelpad=15)
+        # plt.tight_layout()
+        # plt.savefig(r'C:\Users\nicol\OneDrive\Documentos\1 - Faculdade\Metrologia\Escrita\Universal manuscript template for Optica Publishing Group journals\figures\pearson_a_mode.pdf')
+  
 
 # with open (rf'D:\LaserYb\Medidas Espectrometro\17_02_2023\max.txt', 'w') as f:
 #     for q in mod_q:

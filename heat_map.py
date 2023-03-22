@@ -54,11 +54,9 @@ else:
         else:
             pass
 
-final_data = pd.DataFrame(height_vector, columns=['First peak', 'Second peak'])
+final_data = pd.DataFrame(height_vector, columns=['1\u02E2\u1D57', '2\u207F\u1D48'])
 
 corr = final_data.corr(method='pearson')
-
-corr.columns = ['First peak', 'Second peak']
 
 # fig, ax = plt.subplots()
 # ax.scatter(final_data['Peak_one'], final_data['Peak_two'], s=1)
