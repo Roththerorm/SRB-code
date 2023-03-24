@@ -145,13 +145,8 @@ for k in list_plots:
         # ##################### PLOTS #################################
         
         # args_1 = (k, l, power_samples, lim_min, lim_max, num_points, disc, percentage)
-
-
-    #     args_2 = (k, l, parameters, percentage, ax1)
     
-    # # graphs.energy_fluctuation(*args_1, title='n', save='n', fig_path=figure_path)
-
-
+        # graphs.energy_fluctuation(*args_1, title='n', save='n', fig_path=figure_path)
             
         fig, ax = plt.subplots(num=1)
 
