@@ -13,7 +13,7 @@ data = pd.read_csv(path, sep=';', decimal=',')
 # Plot data
 
 matplotlib.rcParams['font.family'] = 'sans-serif'
-matplotlib.rcParams.update({'font.size' : 12})
+matplotlib.rcParams.update({'font.size' : 14})
 matplotlib.rcParams['axes.linewidth'] = 1.5
 matplotlib.rcParams['hatch.linewidth'] = 1.5
 
@@ -30,13 +30,13 @@ x_positions = [min(data['corrente (mA)']),
 
 # List of positions to add the text
 text_pos = [(156, 300,'CW\nREGIME'),
-(351, 285, 'MULTI\nMODE\nREGIME'),
-(520, 150, 'MODE-LOCKED\nREGIME'), 
+(351, 285, 'QUASI\nMODE\nLOCKED\nREGIME'),
+(520, 150, 'STANDARD\nMODE-LOCKED\nREGIME'), 
 (755, 150, 'COMPLEX\nDYNAMICS')]
 
 ax.axvspan(x_positions[0], x_positions[1], color='#CED0C8', alpha=0.4)
 ax.axvspan(x_positions[1], x_positions[2], color='#347B98', alpha=0.4)
-ax.axvspan(x_positions[2], x_positions[3], color='#663399', alpha=0.7, hatch="\\\\\\")
+ax.axvspan(x_positions[2], x_positions[3], color='#663399', alpha=0.4, hatch="\\\\")
 ax.axvspan(x_positions[3], x_positions[4], color='#DEC121', alpha=0.4)
 ax.axvspan(x_positions[4], x_positions[5], color='#5EBA1C', alpha=0.4)
 ax.axvspan(x_positions[5], x_positions[6], color='#E12514', alpha=0.4)
@@ -53,7 +53,7 @@ for x in x_positions_new:
     ax.axvline(x=x, color='black')
 
 for x, y, txt in text_pos:
-    ax.text(x, y, txt, fontsize=10, color='black',
+    ax.text(x, y, txt, fontsize=12, color='black',
     ha='center')
 
 
@@ -66,5 +66,5 @@ ax.set_ylabel('Power (mW)', labelpad=15)
 ax.tick_params(axis='both', direction='in')
 ax.legend(loc='best')
 plt.tight_layout()
-plt.savefig(rf'C:\Users\nicol\OneDrive\Documentos\1 - Faculdade\Metrologia\Escrita\Universal manuscript template for Optica Publishing Group journals\figures\regions_operation.pdf')
+plt.savefig(rf'C:\Users\nicol\Desktop\Figuras (Marcio)\regions of operations.pdf')
 

@@ -69,6 +69,7 @@ def spec_animation(i, ax, df, min_wave, max_wave, y_low, y_max, noise, peaks_sho
                 ax.set_ylabel('Intensity (arb. units)', labelpad=15)
                 ax.set_ylim(y_low, y_max)
                 ax.legend(loc='upper right')
+                print(top_two_peaks)
                 plt.tight_layout()
            
             else:
