@@ -12,9 +12,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator
 from matplotlib.ticker import FormatStrFormatter
+import matplotlib.transforms as mtransforms
 
-size = 12
-
+size = 12.5
+# size = 17.5 for q_max plot
 matplotlib.rcParams['font.family'] = 'sans-serif'
 matplotlib.rcParams.update({'font.size' : size})
 matplotlib.rcParams['axes.linewidth'] = 1.
@@ -68,7 +69,7 @@ def power_fluctuation(*args, show_title, save, fig_path, format):
     
 
 
-def parisi_histogram(*args, show_title, show_label, save, fig_path, format):
+def parisi_histogram(*args, show_title, show_bottom, show_label, label, font_size, save, fig_path, format):
 
     '''
     Here's the following order for arguments parameters
@@ -83,8 +84,8 @@ def parisi_histogram(*args, show_title, show_label, save, fig_path, format):
 
     if show_label == 'y':
 
-        args[4].hist(args[2], bins= math.floor(np.sqrt(len(args[2]))/4), density=True, facecolor='firebrick', alpha=0.75, label=f'P = {round(args[0]/400,2)} P\u209C\u2095')
-        args[4].legend(loc='upper right', fontsize='medium', frameon=True, handletextpad=0.1)
+        args[4].hist(args[2], bins= math.floor(np.sqrt(len(args[2]))/4), density=True, facecolor='firebrick', alpha=0.75, label=f'{label}')
+        args[4].legend(loc='upper right', handlelength=0, handletextpad=0, fancybox=False, frameon=False, fontsize=font_size)
 
     elif show_label == 'n':
         
@@ -97,13 +98,17 @@ def parisi_histogram(*args, show_title, show_label, save, fig_path, format):
     # Remove intermediate of the x axis. More specific it removes {-0.75, -0.25, 0.25, 0.75} from the graph
     args[4].xaxis.set_major_formatter(FormatStrFormatter('%.1f'))
     x_ticks = args[4].xaxis.get_ticklabels()
-    remove_ticks = [2,4,6,8]
-    for i in remove_ticks:
-        x_ticks[i].set_visible(False)
+    # remove_ticks = [2,4,6,8]
+    # for i in remove_ticks:
+    #     x_ticks[i].set_visible(False)
     
-    # Set the axis labels
-    args[4].set_xlabel('$q$', labelpad=15)
-    # plt.setp(args[4].get_xticklabels(), visible=False)
+    if show_bottom == 0:
+        # Set the axis labels
+        args[4].set_xlabel('$q$', labelpad=15)
+    else:
+        plt.setp(args[4].get_xticklabels(), visible=False)
+
+    
     args[4].set_ylabel('$P(q)$', labelpad=15)
 
     # Configuration of ticks (major and minor)
@@ -120,7 +125,7 @@ def parisi_histogram(*args, show_title, show_label, save, fig_path, format):
         plt.savefig(fr'{fig_path}\\parisi_coff_{args[0]}_{args[1]}.{format}')
     
     else:
-        plt.show()
+        pass
 
 
 
@@ -136,40 +141,57 @@ def q_max(*args):
 
         return round((0.7412 * (num) - 15.276), 3) 
     
-    with open(r'D:\LaserYb\Medidas Espectrometro\17_02_2023\max1.txt') as data:
+    with open(r'D:\LaserYb\Medidas Espectrometro\mes 02_23\17_02_2023\max1.txt') as data:
         content = data.read()
         content_list = list(map(float, content[:-1].split('\n')))
         
         current = [(410 - x * 0.8) for x in range(0, 214, 2)]
-        watt = list(map(current_to_watt,current))
-        watt.reverse()
+        #watt = list(map(current_to_watt,current))
+        # watt.reverse()
+        current.reverse()
         indexes = [75,73,71,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0]
         for i in indexes:
             del content_list[i]
-            del watt[i]
-
-        args[0].plot(watt, content_list, '-',lw=1.5, c='firebrick', zorder=1, alpha=0.75)
-        args[0].scatter(watt, content_list, s=30, facecolors='white', edgecolors='firebrick', zorder=3, alpha=0.75)
+            del current[i]
+        
+        
+        args[0].plot(current, content_list, 'o',lw=1, c='firebrick', alpha=0.75)
+        args[0].scatter(current, content_list, s=30, facecolors='white', edgecolors='firebrick', zorder=3, alpha=0.75)
         args[0].tick_params(axis='both', which='major', labelsize=size)
-        args[0].set_xlabel('Power (mW)', labelpad=15)
+        args[0].set_xlabel('Current (mA)', labelpad=15)
         args[0].set_ylabel(r'$|q_{max}|$', labelpad=15)
         args[0].minorticks_on()
         args[0].tick_params(axis='both', which='both', direction='in')
+        
+        
+        # reading_power = [[185,206], [0,0.01],
+        #            [206,212], [0.01,0.89],
+        #            [212,283], [0.89,1], 
+        #            [283,283], [1,0], 
+        #            [283,290], [0,0]]
+        
+        reading_current = [[270,298], [0,0.01],
+                   [298,306], [0.01,0.89],
+                   [306,402], [0.89,1], 
+                   [402,402], [1,0], 
+                   [402,411], [0,0]]
+              
+        for i in range(0,len(reading_current)//2):
+            args[0].plot(reading_current[2*i], reading_current[2*i + 1], zorder=4, c='firebrick')
+
         plt.tight_layout()
-        plt.savefig(rf'C:\Users\nicol\OneDrive\Documentos\1 - Faculdade\Metrologia\Escrita\Universal manuscript template for Optica Publishing Group journals\figures\q_max_adjusted.pdf')
+        #plt.savefig(rf'C:\Users\nicol\OneDrive\Documentos\1 - Faculdade\Metrologia\Escrita\Universal manuscript template for Optica Publishing Group journals\figures\q_max_adjusted.pdf')
 
 
-def spectrum_plots():
-
-    spectrum_values = [[408,1],[320,1],[244,1]]
-    power = ['287 mW', '234 mW','189 mW']
-    colors = ['#5EBA1C', '#E12514', '#347B98']
-
-    fig, ax = plt.subplots()
+def spectrum_plots(*args):
+#240, 290, 388, 406
+    spectrum_values = [[406,1],[388,1],[290,1],[240,1]]
+    power = ['SML', 'QML','QML','CW']
+    colors = ['#5EBA1C', '#DEC121','#663399', '#347B98']
 
     for s in range(len(spectrum_values)):
 
-        path = r'D:\LaserYb\Medidas Espectrometro\17_02_2023\binary_data'
+        path = r'D:\LaserYb\Medidas Espectrometro\mes 02_23\17_02_2023\binary_data'
         filename = f'b_data_{spectrum_values[s][0]}_{spectrum_values[s][1]}.npy'
         filepath = os.path.join(path, filename)
 
@@ -185,18 +207,34 @@ def spectrum_plots():
 
             # Use f-strings to format the column names
             f_data = pd.DataFrame(data, columns=columns)
+            f_data['Wavelengths'] = f_data['Wavelengths'] + 2.5
 
-            max_value = f_data.iloc[:, 1824].max()
-            min_value = f_data.iloc[:, 1824].min()
-            dif = max_value - min_value
-            ax.plot(f_data.iloc[:, 0], f_data.iloc[:, 1824], lw=1.5, label=f'{power[s]}', c=colors[s])
-            ax.tick_params(axis='both', which='major', labelsize=12)
-            ax.set_xlabel('Wavelength (nm)', labelpad=15)
-            ax.set_ylabel('Intensity (arb. units)', labelpad=15)
-            ax.minorticks_on()
-            ax.tick_params(axis='both', which='both', direction='in')
-            ax.legend(loc='best')
+            # max_value = f_data.iloc[:, 1824].max()
+            # min_value = f_data.iloc[:, 1824].min()
+            # dif = max_value - min_value
+            args[0].plot(f_data.iloc[80:272, 0], f_data.iloc[80:272, 2459]/1000, lw=1.5, label=f'{power[s]}', c=colors[s])
+            args[0].tick_params(axis='both', which='major', labelsize=size)
+            args[0].set_xlabel('Wavelength (nm)', labelpad=15)
+            args[0].set_ylabel('Intensity (10³) (arb. units)', labelpad=15)
+            args[0].minorticks_on()
+            args[0].tick_params(axis='both', which='both', direction='in')
 
+
+    args[0].legend(loc='upper right', handlelength=1.5, handletextpad=0.7, fancybox=False, frameon=False, fontsize=size-2)
     plt.tight_layout()
-    plt.legend(loc='best')
-    plt.savefig(rf'C:\Users\nicol\OneDrive\Documentos\1 - Faculdade\Metrologia\Escrita\Universal manuscript template for Optica Publishing Group journals\figures\spectrum_not_normalized.pdf')
+    #plt.savefig(rf'C:\Users\nicol\OneDrive\Documentos\1 - Faculdade\Metrologia\Escrita\Universal manuscript template for Optica Publishing Group journals\figures\spectrum_not_normalized.pdf')
+
+
+# fig, axs = plt.subplot_mosaic([['(a)', '(b)']],
+#                               layout='tight', figsize=(10,5))
+
+# for label, ax in axs.items():
+#     # label physical distance in and down:
+#     trans = mtransforms.ScaledTranslation(15/72, -10/72, fig.dpi_scale_trans)
+#     ax.text(0.0, 1.0, label, transform=ax.transAxes + trans,
+#             fontsize=size, verticalalignment='top', fontfamily='sans-serif')
+
+
+# q_max(axs["(a)"])
+# spectrum_plots(axs["(b)"])
+# plt.savefig(r"C:\Users\nicol\Desktop\Figuras (Marcio)\fig4.pdf")
