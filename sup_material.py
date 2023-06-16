@@ -266,4 +266,4 @@ for k in list_plots:
 
 # fig.subplots_adjust(wspace=25)
 plt.savefig(r'C:\Users\nicol\Desktop\Figuras (Marcio)\SM4.pdf', bbox_inches='tight')
-#plt.show()
+#plt.show()-
