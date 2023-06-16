@@ -15,7 +15,7 @@ pico = 0                # Pick taken in the samples of power
 percentage = 1        # Filter used to select the points
 num_points = 3000      # Number of points to calculate Parisi Coefficient
 total_points = 3000     # Total number of replicas
-first_binary_data = 240
+first_binary_data = 198
 last_binary_data = 412
 step = 2
 std_deviations = []
@@ -59,7 +59,7 @@ current = [math.floor(410 - x * 0.8) for x in range(0, 214, 2)]
 #watt = list(map(current_to_watt,current))
 #watt.reverse()
 current.reverse()
-indexes = [75,73,71,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0]
+indexes = [80,77,75,73,71,70,58,45,44,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0]
 for i in indexes:
     del current[i]
 
@@ -70,14 +70,15 @@ superposition_data = pd.DataFrame()
 
 for peak in peaks_index:
     count = 0
+    skip = 0
     count_2 = 0
     full_data = pd.DataFrame()
     # Path(rf'{in_path}\index_{peak}').mkdir(parents=True, exist_ok=True)
     for k in range( first_binary_data, last_binary_data, step):
         for l in range(1,2):
 
-            if k == 340 or k == 344 or k == 348:
-                pass
+            if skip in indexes:
+                continue
             else:
 
                 print(f'Current file ({k}) ({((k-first_binary_data)//step) + 1} of {int((last_binary_data - first_binary_data)/2)}). Round: {l}')
@@ -165,6 +166,7 @@ for peak in peaks_index:
 
                     count +=1
                     count_2 += 1
+        skip +=1
 
 
     full_data = full_data.fillna(0)
@@ -197,7 +199,7 @@ for peak in peaks_index:
 values = ['(c)', '(d)', '(e)']
 for k in values:
     axs[k].axvline(x=13, ymin=0, ymax=1, color='whitesmoke', lw=2.5, ls='--')
-    axs[k].axvline(x=76, ymin=0, ymax=1, color='whitesmoke', lw=2.5, ls='--')
+    axs[k].axvline(x=70, ymin=0, ymax=1, color='whitesmoke', lw=2.5, ls='--')
 
 axs['(d)'].annotate('', xy=(.5325, .915), xytext=(.5825, .915), xycoords='figure fraction', textcoords='figure fraction', arrowprops=dict(lw=1.6, arrowstyle="<->"))
 
@@ -211,7 +213,6 @@ axs['(d)'].annotate('QML', xy=(.676, .935), xycoords='figure fraction', textcoor
 
 axs['(d)'].annotate('SML', xy=(.785, .935), xycoords='figure fraction', textcoords='figure fraction', ha='center', va='center', fontfamily='sans-serif', fontsize=size-2)
 
-#plt.show()
 plt.savefig(r'C:\Users\nicol\Desktop\Figuras (Marcio)\fig5.pdf', bbox_inches='tight')
 
 

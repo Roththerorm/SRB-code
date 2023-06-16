@@ -53,47 +53,48 @@ size = 12.5
 matplotlib.rcParams['font.family'] = 'sans-serif'
 matplotlib.rcParams.update({'font.size' : size})
 matplotlib.rcParams['axes.linewidth'] = 1.
-matplotlib.rcParams['legend.handlelength'] = 0
+# matplotlib.rcParams['legend.handlelength'] = 0
 
 
 ############# MAIN CODE #############
 
 plot_places = ['(a)', '(b)', '(c)', '(d)', '(e)', '(f)', '(g)', '(h)']
 lable_names = ['CW', 'QML  ', 'QML  ', 'SML']
-list_plots = [240, 290, 388, 406]
-l = 1 
+# list_plots = [240, 290, 388, 406]
+list_plots = [33]
+l = 1
 count = 0
 #, 290, 214
 # 240, 290, 388, 406
 
-fig, axs = plt.subplot_mosaic([['(a)', '(e)'], ['(b)', '(f)'], ['(c)', '(g)'], ['(d)', '(h)']], figsize=(7,9), gridspec_kw=dict(hspace=0.15, wspace=0.55))
+# fig, axs = plt.subplot_mosaic([['(a)', '(e)'], ['(b)', '(f)'], ['(c)', '(g)'], ['(d)', '(h)']], figsize=(7,9), gridspec_kw=dict(hspace=0.15, wspace=0.55))
 
-for label, ax in axs.items():
-    # label physical distance in and down:
-    trans = mtransforms.ScaledTranslation(15/72, -10/72, fig.dpi_scale_trans)
+# for label, ax in axs.items():
+#     # label physical distance in and down:
+#     trans = mtransforms.ScaledTranslation(15/72, -10/72, fig.dpi_scale_trans)
     
-    # Set x-coordinate of label depending on plot position
-    if '(a)' == label or label == '(d)':
-        xcoord = 0.0  # Left plot
-        halign = 'left'
-        color_font='black'
-    elif label =='(c)':
-        xcoord = 0.03  # Left plot
-        halign = 'left'
-        color_font='black'
-    elif '(e)' <= label <= '(h)':
-        xcoord = 0.85  # Right plot
-        halign = 'right'
-        color_font='white'
-    else:
-        xcoord = 0.1  # Left plot
-        halign = 'left'
-        color_font='black'
+#     # Set x-coordinate of label depending on plot position
+#     if '(a)' == label or label == '(d)':
+#         xcoord = 0.0  # Left plot
+#         halign = 'left'
+#         color_font='black'
+#     elif label =='(c)':
+#         xcoord = 0.03  # Left plot
+#         halign = 'left'
+#         color_font='black'
+#     elif '(e)' <= label <= '(h)':
+#         xcoord = 0.85  # Right plot
+#         halign = 'right'
+#         color_font='white'
+#     else:
+#         xcoord = 0.1  # Left plot
+#         halign = 'left'
+#         color_font='black'
     
     
-    ax.text(xcoord, 1.0, label, transform=ax.transAxes + trans,
-            fontsize=size-2, verticalalignment='top', horizontalalignment=halign,
-            fontfamily='sans-serif', color=color_font)
+#     ax.text(xcoord, 1.0, label, transform=ax.transAxes + trans,
+#             fontsize=size-2, verticalalignment='top', horizontalalignment=halign,
+#             fontfamily='sans-serif', color=color_font)
 
 
 for k in list_plots:
@@ -102,8 +103,8 @@ for k in list_plots:
     
     print(f'Current file ({k}) ({((k-first_binary_data)//step) + 1} of {int((last_binary_data - first_binary_data)/2)}). Round: {l}')
     
-    path = r'D:\LaserYb\Medidas Espectrometro\mes 02_23\17_02_2023\binary_data'
-    figure_path = r'C:\Users\nicol\OneDrive\Documentos\1 - Faculdade\Metrologia\Escrita\Universal manuscript template for Optica Publishing Group journals\figures'
+    path = r'D:\LaserYb\Medidas Espectrometro\mes 12\22_12_2022\binary_data'
+    figure_path = r'D:\LaserYb\Resultado de Tratamento de Dados\MES_12_2022\27_12_2022'
 
     filename = f'b_data_{k}_{l}.npy'
     filepath = os.path.join(path, filename)
@@ -126,85 +127,98 @@ for k in list_plots:
         
         print('> Selecting interval range')
 
-        # plot_animation(f_data, 100, 250, 0, 11000, 700, 'y', 10, False)
+        plot_animation(f_data, 0, 1000, 0, 12000, 700, 'y', 10, False)
 
-        # Computes the total power of each replica
-        power_samples = compute_power(f_data, data, trapezoid)
+#         # Computes the total power of each replica
+#         power_samples = compute_power(f_data, data, trapezoid)
 
-        # Filters out the data only to have the amount of points required
-        f_data, outrange, disc, lim_max, lim_min = remove_outliers(power_samples, percentage, pico, num_points, total_points, f_data)
+#         # Filters out the data only to have the amount of points required
+#         f_data, outrange, disc, lim_max, lim_min = remove_outliers(power_samples, percentage, pico, num_points, total_points, f_data)
 
-        # Shows how many points were discarded. The number shows representes the points taken inside the percentage
-        # minus the total points wanted
-        print(f'Were discarded {disc} from {total_points}')
-        print('> Calculating Parisi coefficients...')
+#         # Shows how many points were discarded. The number shows representes the points taken inside the percentage
+#         # minus the total points wanted
+#         print(f'Were discarded {disc} from {total_points}')
+#         print('> Calculating Parisi coefficients...')
 
-        pearson_dataframe = f_data.iloc[110:238,1:].T
+#         # pearson_dataframe = f_data.iloc[110:238,1:].T
 
-        # Get the average intensity I for each k
-        f_data['sum'] = f_data.iloc[:,1:].sum(axis=1) / outrange
+#         pearson_dataframe = f_data.iloc[:,1:].T
 
-        # Remove the 'Wavelengths' and 'Sum' columns
-        f_data_subset = f_data.iloc[:, 1:-1].subtract(f_data['sum'], axis=0)
+#         # Get the average intensity I for each k
+#         f_data['sum'] = f_data.iloc[:,1:].sum(axis=1) / outrange
 
-        # Retrieve the name of the columns
-        columns = f_data.columns
+#         # Remove the 'Wavelengths' and 'Sum' columns
+#         f_data_subset = f_data.iloc[:, 1:-1].subtract(f_data['sum'], axis=0)
 
-        # Calculate the Parisi Coefficient 
-        correlation = f_data_subset.corr(method='pearson')
+#         # Retrieve the name of the columns
+#         columns = f_data.columns
 
-        pearson_correlation = pearson_dataframe.corr(method='pearson')
+#         # Calculate the Parisi Coefficient 
+#         # correlation = f_data_subset.corr(method='pearson')
 
-        labels_values = (f_data.iloc[110:238,0].values)
-        labels = [int(i) for i in labels_values]
-        pearson_correlation.columns = labels
-        pearson_correlation.index = labels
+#         pearson_correlation = pearson_dataframe.corr(method='pearson')
 
-        print('Excluding duplicates')
+#         #labels_values = (f_data.iloc[110:238,0].values)
+#         labels_values = (f_data.iloc[:,0].values)
+#         labels = [int(i) for i in labels_values]
+#         pearson_correlation.columns = labels
+#         pearson_correlation.index = labels
 
-        # Flatten the array and remove the main diagonal elements
-        flat_array = correlation.values.flatten()
-        flat_array = flat_array[np.arange(flat_array.size) % (correlation.shape[0] + 1) != 0]
+#         print('Excluding duplicates')
 
-        # Create a list of the unique, non-NaN elements
-        parameters = list(set(flat_array))
+#         # Flatten the array and remove the main diagonal elements
+#         # flat_array = correlation.values.flatten()
+#         # flat_array = flat_array[np.arange(flat_array.size) % (correlation.shape[0] + 1) != 0]
 
-        print('Done!')
-        print('> Final calculations and preparing plots')
+#         # Create a list of the unique, non-NaN elements
+#         # parameters = list(set(flat_array))
 
-        # hist, bin_edges = np.histogram(parameters, density=True, bins=math.floor(np.sqrt(len(parameters))))
+#         print('Done!')
+#         print('> Final calculations and preparing plots')
 
-        # max_q = abs(bin_edges[np.argmax(hist)])
+#         # # hist, bin_edges = np.histogram(parameters, density=True, bins=math.floor(np.sqrt(len(parameters))))
 
-        # mod_q.append(max_q)
+#         # # max_q = abs(bin_edges[np.argmax(hist)])
+
+#         # # mod_q.append(max_q)
         
-        # ##################### PLOTS #################################
-        
-        # args_1 = (k, l, power_samples, lim_min, lim_max, num_points, disc, percentage)
+#         # # ##################### PLOTS #################################
+#         # fig0, ax0 = plt.subplots()
+
+#         # args_1 = (k, l, power_samples, lim_min, lim_max, num_points, disc, percentage, ax0)
     
-        # graphs.energy_fluctuation(*args_1, title='n', save='n', fig_path=figure_path)
-            
-        args_2 = (k, l, parameters, percentage, axs[plot_places[count]])
+#         # graphs.power_fluctuation(*args_1, show_title='y', save='y', fig_path=figure_path, format='png')
 
-        graphs.parisi_histogram(*args_2, show_title='n', show_bottom=(count+1)%4, label=lable_names[count], show_label='y', font_size=size-2, save='n', fig_path=figure_path, format='pdf')
-        heatmap = sns.heatmap(pearson_correlation, vmin=-1, vmax=1, cmap='icefire', xticklabels=30, yticklabels=30, cbar_kws={'label': 'Pearson correlation', 'ticks':[-1.0,0.0,1.0], 'shrink': 0.85}, ax=axs[plot_places[count+4]])
-        # heatmap.tick_params(which='both', direction="in")
-        heatmap.set_yticklabels(heatmap.get_yticklabels(), rotation=0, va='center')
+#         # fig1, ax2 = plt.subplots()  
         
-        if (count+1)%4 == 0:
-            heatmap.set_xlabel('Wavelength (nm)', labelpad=15)
-        else: 
-            plt.setp(heatmap.get_xticklabels(), visible=False)
-        
-        heatmap.set_ylabel('Wavelength (nm)', labelpad=15)
+#         # args_2 = (k, l, parameters, percentage, ax2)
 
-        count += 1
+#         # graphs.parisi_histogram(*args_2, show_title='y', show_bottom=0, label='0', show_label='n', font_size=size, save='n', fig_path=figure_path, format='png')
+
+#         # plt.close()
+#         fig, ax2 = plt.subplots()
+
+#         heatmap = sns.heatmap(pearson_correlation, vmin=-1, vmax=1, cmap='icefire', xticklabels=50, yticklabels=50, cbar_kws={'label': 'Pearson correlation', 'ticks':[-1.0,0.0,1.0], 'shrink': 0.85}, ax=ax2)
+
+#         plt.show()
+#         # heatmap = sns.heatmap(pearson_correlation, vmin=-1, vmax=1, cmap='icefire', xticklabels=30, yticklabels=30, cbar_kws={'label': 'Pearson correlation', 'ticks':[-1.0,0.0,1.0], 'shrink': 0.85}, ax=axs[plot_places[count+4]])
+#         # heatmap.tick_params(which='both', direction="in")
+# #         heatmap.set_yticklabels(heatmap.get_yticklabels(), rotation=0, va='center')
+        
+# #         if (count+1)%4 == 0:
+# #             heatmap.set_xlabel('Wavelength (nm)', labelpad=15)
+# #         else: 
+# #             plt.setp(heatmap.get_xticklabels(), visible=False)
+        
+# #         heatmap.set_ylabel('Wavelength (nm)', labelpad=15)
+
+# #         count += 1
   
 
-# with open (rf'D:\LaserYb\Medidas Espectrometro\17_02_2023\max.txt', 'w') as f:
-#     for q in mod_q:
-#         f.write(f'{q}\n')
+# # # with open (rf'D:\LaserYb\Medidas Espectrometro\17_02_2023\max.txt', 'w') as f:
+# # #     for q in mod_q:
+# # #         f.write(f'{q}\n')
 
-# fig.subplots_adjust(wspace=25)
-plt.savefig(r'C:\Users\nicol\Desktop\Figuras (Marcio)\fig3.pdf', bbox_inches='tight')
+# # # fig.subplots_adjust(wspace=25)
+# # plt.savefig(r'C:\Users\nicol\Desktop\Figuras (Marcio)\fig3.pdf', bbox_inches='tight')
 
