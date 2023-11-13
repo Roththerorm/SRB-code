@@ -1,7 +1,7 @@
 '''
 This script generates the graphs for the figures. It's a simple way to organize all data graphs in just one set of functions.
 
-Created by: @Nicolas Pessoa
+Created by: Nicolas Pessoa
 '''
 
 import os

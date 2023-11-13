@@ -44,5 +44,9 @@
         "zorder"
     ],
     "cSpell.language": "en,pt,pt-BR",
-    "terminal.explorerKind": "external"
+    "terminal.explorerKind": "external",
+    "cSpell.ignoreWords": [
+        "mmes"
+    ],
+    "python.analysis.autoImportCompletions": true
 }

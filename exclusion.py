@@ -5,7 +5,7 @@ from scipy.signal import find_peaks
 
 def remove_outliers(power_samples, percentage, pico, num_points, total_points, df):
 
-    # np.histogram to find the histogram peaks and apply Sturges rule for the number of bins
+    # np.histogram to find the histogram peaks and apply Square-root choice for the number of bins
     root_bins = int(np.sqrt(len(power_samples + 1)))
     histogram, histogram_bins = np.histogram(power_samples, bins= 2 * root_bins)
     peaks, _ = find_peaks(histogram, height=10, prominence=30, distance=10)

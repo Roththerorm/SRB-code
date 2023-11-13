@@ -38,7 +38,7 @@ def eliminate_non_numeric(path):
 ####################### CODE #################################
 
 # Use the path that only contains the data of collection
-path = r'D:\LaserYb\Medidas Espectrometro\13_11_2023'
+path = r'D:\LaserYb\Medidas Osciloscópio\copia'
 
 # Select the elements that only star with a number 
 # (DO NOT CREATE ANY FOLDER THAT STARTS WITH A NUMBER INSIDE THE FILE)
@@ -67,8 +67,8 @@ for i in range(len(f_names)):
         concatenated_df.drop((concatenated_df.columns[k] for k in range(1,2*n_files+1) if k % 2 == 0),
         axis=1, inplace=True)
 
-        all_data_array = concatenated_df.to_numpy()
-     
-        np.save(rf'{path}\binary_data\b_data_{sub_list[j]}.npy', all_data_array)
+#        all_data_array = concatenated_df.to_numpy()
+    
+#         np.save(rf'{path}\binary_data\b_data_{sub_list[j]}.npy', all_data_array)
 
-        print(f'Data convertida {i+1} de {len(f_names)}. \n Sub {j+1} de {len(sub_list)} \n Tempo total {time.time() - st} segundos')
+#         print(f'Data convertida {i+1} de {len(f_names)}. \n Sub {j+1} de {len(sub_list)} \n Tempo total {time.time() - st} segundos')

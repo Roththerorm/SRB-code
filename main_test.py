@@ -38,77 +38,37 @@ import matplotlib.ticker as ticker
 
 ############# GLOBAL VARIABLES #############
               
-pico = 0                # Pick taken in the samples of power
-percentage = 0.5        # Filter used to select the points
-num_points = 3000     # Number of points to calculate Parisi Coefficient
-total_points = 3000     # Total number of replicas
-first_binary_data = 298
-last_binary_data = 298
+pico = 0                  # Pick taken in the samples of power
+percentage = 0.5          # Filter used to select the points
+num_points = 3000         # Number of points to calculate Parisi Coefficient
+total_points = 3000       # Total number of replicas
+first_binary_data = 198
+last_binary_data = 412
 step = 2
 mod_q = []
-
-
 i = 0
-size = 12.5
-matplotlib.rcParams['font.family'] = 'sans-serif'
-matplotlib.rcParams.update({'font.size' : size})
-matplotlib.rcParams['axes.linewidth'] = 1.
-# matplotlib.rcParams['legend.handlelength'] = 0
+
+
 
 
 ############# MAIN CODE #############
 
-plot_places = ['(a)', '(b)', '(c)', '(d)', '(e)', '(f)', '(g)', '(h)']
-lable_names = ['CW', 'QML  ', 'QML  ', 'SML']
-# list_plots = [240, 290, 388, 406]
-list_plots = [33]
 l = 1
 count = 0
-#, 290, 214
-# 240, 290, 388, 406
-
-# fig, axs = plt.subplot_mosaic([['(a)', '(e)'], ['(b)', '(f)'], ['(c)', '(g)'], ['(d)', '(h)']], figsize=(7,9), gridspec_kw=dict(hspace=0.15, wspace=0.55))
-
-# for label, ax in axs.items():
-#     # label physical distance in and down:
-#     trans = mtransforms.ScaledTranslation(15/72, -10/72, fig.dpi_scale_trans)
-    
-#     # Set x-coordinate of label depending on plot position
-#     if '(a)' == label or label == '(d)':
-#         xcoord = 0.0  # Left plot
-#         halign = 'left'
-#         color_font='black'
-#     elif label =='(c)':
-#         xcoord = 0.03  # Left plot
-#         halign = 'left'
-#         color_font='black'
-#     elif '(e)' <= label <= '(h)':
-#         xcoord = 0.85  # Right plot
-#         halign = 'right'
-#         color_font='white'
-#     else:
-#         xcoord = 0.1  # Left plot
-#         halign = 'left'
-#         color_font='black'
-    
-    
-#     ax.text(xcoord, 1.0, label, transform=ax.transAxes + trans,
-#             fontsize=size-2, verticalalignment='top', horizontalalignment=halign,
-#             fontfamily='sans-serif', color=color_font)
 
 
-for k in list_plots:
+
+for k in range(first_binary_data, last_binary_data, step):
 
     r = 0
     
     print(f'Current file ({k}) ({((k-first_binary_data)//step) + 1} of {int((last_binary_data - first_binary_data)/2)}). Round: {l}')
     
-    path = r'D:\LaserYb\Medidas Espectrometro\mes 12\22_12_2022\binary_data'
-    figure_path = r'D:\LaserYb\Resultado de Tratamento de Dados\MES_12_2022\27_12_2022'
+    path = rf'D:\LaserYb\Medidas Espectrometro\mes 02_23\17_02_2023\binary_data'
+    figure_path = rf'D:\LaserYb\Resultado de Tratamento de Dados\MES_12_2022\27_12_2022'
 
     filename = f'b_data_{k}_{l}.npy'
     filepath = os.path.join(path, filename)
-
 
     # Use os.path.exists to check if the file exists
     if not os.path.exists(filepath):
@@ -118,7 +78,6 @@ for k in list_plots:
         with open(filepath, 'rb') as f:
             data = np.load(f)
 
-        # print('> Loading data frame')
         # Use list comprehension to generate the list of column names
         columns = ['Wavelengths'] + [f'Intensity_{i}' for i in range(1, len(data[0]))]
 
@@ -126,58 +85,50 @@ for k in list_plots:
         f_data = pd.DataFrame(data, columns=columns)
         f_data['Wavelengths'] = f_data['Wavelengths'] + 2.5
         
-        print('> Selecting interval range')
+        # Computes the total power of each replica
+        power_samples = compute_power(f_data, data, trapezoid)
 
-        plot_animation(f_data, 0, 1000, 0, 12000, 700, 'y', 10, False)
+        # Filters out the data only to have the amount of points required
+        f_data, outrange, disc, lim_max, lim_min = remove_outliers(power_samples, percentage, pico, num_points, total_points, f_data)
 
-#         # Computes the total power of each replica
-#         power_samples = compute_power(f_data, data, trapezoid)
+        # Shows how many points were discarded. The number shows representes the points taken inside the percentage minus the total points wanted
+        print(f'Were discarded {disc} from {total_points}')
+        print('> Calculating Parisi coefficients...')
 
-#         # Filters out the data only to have the amount of points required
-#         f_data, outrange, disc, lim_max, lim_min = remove_outliers(power_samples, percentage, pico, num_points, total_points, f_data)
+        # Get the average intensity I for each k
+        f_data['sum'] = f_data.iloc[:,1:].sum(axis=1) / outrange
 
-#         # Shows how many points were discarded. The number shows representes the points taken inside the percentage
-#         # minus the total points wanted
-#         print(f'Were discarded {disc} from {total_points}')
-#         print('> Calculating Parisi coefficients...')
-
-#         # pearson_dataframe = f_data.iloc[110:238,1:].T
-
-#         pearson_dataframe = f_data.iloc[:,1:].T
-
-#         # Get the average intensity I for each k
-#         f_data['sum'] = f_data.iloc[:,1:].sum(axis=1) / outrange
-
-#         # Remove the 'Wavelengths' and 'Sum' columns
-#         f_data_subset = f_data.iloc[:, 1:-1].subtract(f_data['sum'], axis=0)
+        # Remove the 'Wavelengths' and 'Sum' columns
+        f_data_subset = f_data.iloc[:, 1:-1].subtract(f_data['sum'], axis=0)
 
 #         # Retrieve the name of the columns
 #         columns = f_data.columns
 
-#         # Calculate the Parisi Coefficient 
-#         # correlation = f_data_subset.corr(method='pearson')
+        # Calculate the Parisi Coefficient 
+        correlation = f_data_subset.corr(method='pearson')
 
-#         pearson_correlation = pearson_dataframe.corr(method='pearson')
+        print('Excluding duplicates')
 
-#         #labels_values = (f_data.iloc[110:238,0].values)
-#         labels_values = (f_data.iloc[:,0].values)
-#         labels = [int(i) for i in labels_values]
-#         pearson_correlation.columns = labels
-#         pearson_correlation.index = labels
+        # Flatten the array and remove the main diagonal elements
+        flat_array = correlation.values.flatten()
+        flat_array = flat_array[np.arange(flat_array.size) % (correlation.shape[0] + 1) != 0]
 
-#         print('Excluding duplicates')
+        # Create a list of the unique, non-NaN elements
+        parameters = list(set(flat_array))
+        
+        print('Done!')
+        print('> Final calculations, saving data and preparing plots')
 
-#         # Flatten the array and remove the main diagonal elements
-#         # flat_array = correlation.values.flatten()
-#         # flat_array = flat_array[np.arange(flat_array.size) % (correlation.shape[0] + 1) != 0]
+        number_bins = np.linspace(-1, 1, math.ceil(np.sqrt(len(parameters)))).tolist()
 
-#         # Create a list of the unique, non-NaN elements
-#         # parameters = list(set(flat_array))
+        hist, bin_edges = np.histogram(parameters, density=True, bins=number_bins)
 
-#         print('Done!')
-#         print('> Final calculations and preparing plots')
+        bin_centers = bin_edges[:-1] + np.diff(bin_edges)/2
 
-#         # # hist, bin_edges = np.histogram(parameters, density=True, bins=math.floor(np.sqrt(len(parameters))))
+        parred_elements = list(zip(bin_centers, hist))
+        
+        with open(f'histogram_data/bins_hist_file_{k}.txt', 'w', encoding='utf-8') as f:
+            f.write('\n'.join(f'{tup[0]}    {tup[1]}' for tup in parred_elements))
 
 #         # # max_q = abs(bin_edges[np.argmax(hist)])
 
